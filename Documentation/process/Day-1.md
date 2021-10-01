@@ -2,8 +2,8 @@
 
 **INDEX**
 
-    1.[Day 1](#day-1-one---preparation)
-    2.[Thought Processes Documentation](#my-thought-processes)
+1. [Day 1](#day-1-one---preparation)
+2. [Thought Processes Documentation](#my-thought-processes)
 
 ## Day 1 (one) - Preparation
 
