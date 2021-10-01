@@ -33,3 +33,25 @@
      2. Prepare _documentation_ files
      3. **Brainstorm** about design and development tools
      4. Use **Figma** to make a draft of the _dashboard_
+
+## My thought processes
+
+> I'm not really sure if this is the correct way, I **never** did a _dashboard_ and _document my thought processes_ before, so... I will try to do my best.
+
+Today, I started this test doing some _research_ about the requeriments, _thinking_ about which is the goal and how can I _meet_ this challenge (with my _current knowledge_). After that, I did a _Brainstorm_ to organize my ideas and used **_Postman_** to take a look at what kind of data I will have to handle, then I started to design with **_Figma_** the project.
+
+I'm going to do 5 (**Five**) boxes for the _Desktop_ screen:
+
+        1. Total Nodes
+        2. Total of New Nodes
+        3. Latest Node
+        4. List of nodes with a preview showing the space available in each node
+        5. A box in which appear details about the node clicked on the list
+
+And, for the _Mobile_ screen:
+
+        - The same as _Desktop_, but the details box appear overlay.
+
+> As I **don't** have so much _knowledge_ and/or _experience_, I **don't** have so many _options_ to meet the requirements.
+
+**I will upload a folder with Figma's Prototype.**
