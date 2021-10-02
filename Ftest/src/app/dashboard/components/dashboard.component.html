@@ -1,0 +1,12 @@
+<div class="dashboard">
+  <section class="dashboard__primary">
+    <simple-stats
+      [nodes]="nodes.length"
+      [newNodes]="newNodes.length"
+      [lastNode]="lastNode"
+    ></simple-stats>
+  </section>
+  <section class="dashboard__secondary">
+    <tables-stats [nodes]="sortedNodes"></tables-stats>
+  </section>
+</div>

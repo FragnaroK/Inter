@@ -1,0 +1,8 @@
+<div *ngIf="node && index" class="node">
+  <div class="node__id">{{ index }}</div>
+  <div class="node__info">
+    <p>FD: {{ node.free_disk | toGB }} GB</p>
+    <p>FR: {{ node.free_ram | toGB }} GB</p>
+  </div>
+  <button class="node__show">></button>
+</div>

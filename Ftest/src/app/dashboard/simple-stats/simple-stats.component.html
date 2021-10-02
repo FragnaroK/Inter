@@ -1,0 +1,17 @@
+<div class="boxes">
+  <div *ngIf="nodes" class="boxes__total-users">
+    <h3 class="total-users__title">Total Nodes</h3>
+    <h5 class="total-users__subtitle"></h5>
+    <p class="total-users__content">{{ nodes }}</p>
+  </div>
+  <div *ngIf="newNodes" class="boxes__new-users">
+    <h3 class="new-users__title">New Nodes</h3>
+    <h5 class="new-users__subtitle">Last 24 hours</h5>
+    <p class="new-users__content">{{ newNodes }}</p>
+  </div>
+  <div *ngIf="lastNode" class="boxes__last-new">
+    <h3 class="last-new__title">Last Node</h3>
+    <h5 class="last-new__subtitle"></h5>
+    <p class="last-new__content">{{ lastNode }}</p>
+  </div>
+</div>
