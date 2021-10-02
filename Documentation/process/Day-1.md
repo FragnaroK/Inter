@@ -12,8 +12,7 @@
    - Which are the requirements?
 
      - Full dynamic
-     - Store data from the API in a database:
-       > Only retain hourly data from data **older than 24hs**, API can be **unreachable**
+     - API can be **unreachable** (Display **Error message**)
      - Slef-updating
        > (Should be **efficiently**)
      - Clean, secure and readable code.
@@ -56,7 +55,5 @@ I'm going to do 5 (**Five**) boxes for the _Desktop_ screen:
 And, for the _Mobile_ screen:
 
         - The same as _Desktop_, but the details box appear overlay.
-
-> As I **don't** have so much _knowledge_ and/or _experience_, I **don't** have so many _options_ to meet the requirements.
 
 **I will upload a folder with Figma's Prototype.**
