@@ -75,6 +75,8 @@ I'm thinking about two options to meet this challenge:
 
 First, I'm going to build the structure, when I finish that I will connect it with the real API.
 
+> I'm going to use BEM method.
+
 I'm making use of decorators `@Input()` to transport node values between components and make it more efficient, using a piece of the API data localy. Furthermore, I'm using the library **lodash** and **Moment.js** to easy access to some features/functions like:
 
 - OrderBy(): Sort nodes by date ("up_since")
@@ -96,3 +98,41 @@ I didn't have enough time to start coding the design but I finished with showing
      > node-preview and node-details are separated components
 
 I made a pipe to transform MB to GB and have more readable data.
+
+## Day 3 - Finishing structure and test data showing
+
+I'm finishing the last table `node-details` to show detailed info about the clicked node. I'm doing some research about charts and some libraries, I find one who seems to be efficient and easy to implement.
+
+On the other hand, in `node-details` table, I made a very simple estructure following the design:
+
+1. **It has two sections**:
+
+   - Ram
+   - Disk
+
+2. **The sections are divided in:**
+
+   - Text stats: To show in plane text the details
+   - Chart stats: To show in animated charts the details
+
+---
+
+A problem arise with the chart library, but I'm looking for a solution. **The problem is:**
+
+- When I want to show the chart, it doesn't appear, I think it is because the variables used are initializing without any `node` because there is no node when the chart want to render, and it throw error.
+
+**Solution progress:**
+
+- May the best solution is verify that the node really exist before renderize the chart.
+- It existed, but the problem was the library, when you set some data in the chart, you can't change it individualy. The solution(for now) was set all the data again.
+
+---
+
+Finished a part of the design:
+
+- Added Header with sidebar to add new routes
+- I used CSS GRID and flexbox to organize the content of the dashboard
+- Table with the list almost finished, just a few details to add (like font and some effects)
+- Details table data showing correctly and sync with clicks in the list of previews
+
+Tomorrow I'm going to finish with the design and then focus in **the API and self update**

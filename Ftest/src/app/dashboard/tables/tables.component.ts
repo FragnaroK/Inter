@@ -8,7 +8,15 @@ import { Component, OnInit, Input } from '@angular/core';
 export class TablesComponent implements OnInit {
   constructor() {}
 
-  @Input() nodes?: any[any];
+  nodeClicked: any;
+  @Input() nodes?: any[any]; // Get nodes
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.showNode(this.nodes[0]); // Assign Default data if any node was selected - Just for Desktop, because in mobile this table appear overlay
+  }
+
+  showNode(node: any) {
+    // Assing node seleceted to send it to child component
+    this.nodeClicked = node;
+  }
 }

@@ -1,0 +1,12 @@
+.dashboard {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  &__primary,
+  &__secondary {
+    width: 100%;
+    height: 100vh;
+  }
+
+}

@@ -1,8 +1,12 @@
 <div *ngIf="node && index" class="node">
   <div class="node__id">{{ index }}</div>
   <div class="node__info">
-    <p>FD: {{ node.free_disk | toGB }} GB</p>
-    <p>FR: {{ node.free_ram | toGB }} GB</p>
+    <p>
+      FD: <span> {{ node.free_disk | toGB }} </span> GB
+    </p>
+    <p>
+      FR: <span> {{ node.free_ram | toGB }} </span> GB
+    </p>
   </div>
-  <button class="node__show">></button>
+  <button class="node__show" (click)="selectNode(node)">></button>
 </div>

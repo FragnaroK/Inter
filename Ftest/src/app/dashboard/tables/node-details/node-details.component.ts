@@ -1,15 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { LegendPosition, ScaleType } from '@swimlane/ngx-charts';
+import { GetPercentPipe } from 'src/app/shared/pipes/get-percent.pipe';
 
 @Component({
-  selector: 'app-node-details',
+  selector: 'node-details',
   templateUrl: './node-details.component.html',
-  styleUrls: ['./node-details.component.scss']
+  styleUrls: ['./node-details.component.scss'],
 })
 export class NodeDetailsComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
+  @Input() node?: any;
+  @Input() index?: number;
 
-  ngOnInit(): void {
-  }
+  primaryColor: string = '#00AEFF';
+  secondaryColor: string = '#004565';
 
+  /*  CHART CONFIG */
+  legend = {
+    show: true,
+    position: LegendPosition.Below,
+  };
+  colors = {
+    name: '',
+    selectable: false,
+    group: ScaleType.Quantile,
+    domain: [this.primaryColor, this.secondaryColor],
+  };
+
+  ngOnInit(): void {}
 }

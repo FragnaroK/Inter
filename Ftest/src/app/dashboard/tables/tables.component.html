@@ -1,18 +1,22 @@
 <div class="tables">
   <div class="tables__nodes">
-    <div class="nodes__header">
-      <h2 class="nodes__header-title">NODES</h2>
-      <h4 class="nodes__header-subtitle">FD = "Free Disk" FR = "Free RAM"</h4>
-      <hr class="divider" />
+    <div class="tables__nodes__header">
+      <h2 class="tables__nodes__header-title">NODES</h2>
+      <h4 class="tables__nodes__header-subtitle">
+        FD = "Free Disk" FR = "Free RAM"
+      </h4>
     </div>
     <div *ngIf="nodes" class="nodes__list">
       <node-preview
         *ngFor="let node of nodes"
         [index]="nodes.indexOf(node)"
         [node]="node"
+        (sendNode)="showNode(node)"
       ></node-preview>
     </div>
     <div *ngIf="!nodes" class="error-msg">Error loading content...</div>
   </div>
-  <div class="tables__node-details"></div>
+  <div class="tables__node-details">
+    <node-details [node]="nodeClicked" [index]="nodeClicked?.id"></node-details>
+  </div>
 </div>

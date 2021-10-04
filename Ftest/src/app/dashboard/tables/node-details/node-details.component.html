@@ -1,1 +1,91 @@
-<p>node-details works!</p>
+<section *ngIf="node && index" class="node-details">
+  <!-- Header details -->
+  <div class="node-details__header">
+    <div class="header__id">{{ index }}</div>
+    <div class="header__date">{{ node.up_since }}</div>
+    <button class="shockBtn2 header--close">X</button>
+  </div>
+  <!-- Node details -->
+  <div class="node-details__details">
+    <!-- Disk details -->
+    <section class="details__disk">
+      <h2 class="details__title">DISK</h2>
+      <!-- Text -->
+      <div class="disk__text-details">
+        <p class="total text-details" id="disk__total">
+          Total:
+          <span class="text-details__value">
+            {{ node.allocated_disk + node.free_disk | toGB }}
+          </span>
+          GB
+        </p>
+        <p class="allocated text-details" id="disk__allocated">
+          Allocated:
+          <span class="text-details__value">
+            {{ node.allocated_disk | toGB }}
+          </span>
+          GB
+        </p>
+        <p class="free text-details" id="disk__free">
+          Free:
+          <span class="text-details__value"> {{ node.free_disk | toGB }} </span>
+          GB
+        </p>
+      </div>
+      <!-- Chart -->
+      <div class="disk__chart-details">
+        <chart-stats
+          *ngIf="node"
+          [node]="node"
+          [colors]="colors"
+          [labels]="false"
+          [doughnut]="false"
+          [dataType]="'disk'"
+        ></chart-stats>
+      </div>
+    </section>
+    <!-- Ram details -->
+    <section class="details__ram">
+      <h2 class="details__title">RAM</h2>
+      <!-- Text -->
+      <div class="ram__text-stats">
+        <p class="total text-details" id="ram__total">
+          Total:
+          <span class="text-details__value">
+            {{ node.allocated_ram + node.free_ram | toGB }}
+          </span>
+          GB
+        </p>
+        <p class="allocated text-details" id="ram__allocated">
+          Allocated:
+          <span class="text-details__value">
+            {{ node.allocated_ram | toGB }}
+          </span>
+          GB
+        </p>
+        <p class="free text-details" id="ram__free">
+          Free:
+          <span class="text-details__value"> {{ node.free_ram | toGB }} </span>
+          GB
+        </p>
+      </div>
+      <!-- Chart -->
+      <div class="ram__chart-stats" id="ram_chart">
+        <chart-stats
+          *ngIf="node"
+          [node]="node"
+          [colors]="colors"
+          [labels]="false"
+          [legend]="legend"
+          [doughnut]="false"
+          [dataType]="'ram'"
+        ></chart-stats>
+      </div>
+    </section>
+  </div>
+  <div class="node-details__footer">
+    <p class="allocated-ref"><span>*</span> Allocated</p>
+    <p class="free-ref"><span>*</span> Free</p>
+  </div>
+  <!-- Footer details -->
+</section>

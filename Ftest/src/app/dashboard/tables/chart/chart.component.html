@@ -1,0 +1,19 @@
+<ngx-charts-pie-chart
+  *ngIf="node && data"
+  [results]="data"
+  [scheme]="colors"
+  [labels]="labels"
+  [legend]="legend.show"
+  [legendPosition]="legend.position"
+  [doughnut]="doughnut"
+>
+  <ng-template #tooltipTemplate let-model="model">
+    <div class="tooltip">
+      <div class="tooltip__text">
+        <span>S</span> <b> {{ model.name | uppercase }} </b><br />
+        {{ model.value.toString() | slice: 0:4 }} <span>%</span>
+      </div>
+    </div>
+  </ng-template>
+</ngx-charts-pie-chart>
+<div *ngIf="!node || !data" class="errorMessage">Something goes wrong</div>

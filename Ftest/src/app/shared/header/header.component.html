@@ -1,0 +1,32 @@
+<header>
+  <section class="user">
+    <span class="user__profile-img">i</span>
+    <p class="user__profile-role">Role</p>
+  </section>
+  <section class="logo">
+    <a routerLink="/dashboard" class="logo__home"
+      ><img src="" alt="Logo" class="logo__image"
+    /></a>
+  </section>
+  <nav class="navBar">
+    <ul class="navBar__list">
+      <li class="list-item">Dashboard</li>
+    </ul>
+  </nav>
+  <button class="sideBar-btn sideBar-btn--open" (click)="toggleSideBar()">
+    <span></span>
+  </button>
+  <section class="sideBar" [ngClass]="{ open: sideBar }">
+    <button class="sideBar-btn sideBar-btn--close" (click)="toggleSideBar()">
+      X
+    </button>
+    <div class="sideBar__logo">
+      <img src="" alt="logo" class="logo-image" />
+    </div>
+    <nav class="sideBar__navBar">
+      <ul class="sideBar__navBar-list">
+        <li class="list-item">Dashboard</li>
+      </ul>
+    </nav>
+  </section>
+</header>

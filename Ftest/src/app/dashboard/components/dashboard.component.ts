@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
     });
 
     // push the list of nodes sorted ascending into sortedNodes
-    this.sortedNodes = this.sortNodesByDate(this.nodes, true);
+    this.sortedNodes = this.sortNodesByDate(this.nodes, false);
 
     // save the last new node into lastNode
     this.lastNode = moment(this.sortedNodes[0].up_since).format(

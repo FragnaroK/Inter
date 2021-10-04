@@ -1,0 +1,14 @@
+@import './shared/utils/vars.scss';
+
+::ng-deep * {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: 'Rubik-Light', sans-serif, 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+::ng-deep body {
+
+  color: white;
+  background: #060606;
+}

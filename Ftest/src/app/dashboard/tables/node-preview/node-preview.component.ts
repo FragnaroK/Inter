@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 @Component({
   selector: 'node-preview',
   templateUrl: './node-preview.component.html',
@@ -7,8 +7,13 @@ import { Component, Input, OnInit } from '@angular/core';
 export class NodePreviewComponent implements OnInit {
   constructor() {}
 
-  @Input() node?: any[any];
-  @Input() index?: number;
+  @Input() node?: any[any]; // get node
+  @Input() index?: number; // get index from array
+  @Output() sendNode = new EventEmitter(); // Event emiter to allow communication with parent component
 
+  selectNode(node: any) {
+    // send the node selected to parent component
+    this.sendNode.emit(node);
+  }
   ngOnInit(): void {}
 }

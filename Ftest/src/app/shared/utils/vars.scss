@@ -1,0 +1,62 @@
+@font-face {
+  font-family: 'Rubik-Light';
+  src: url('../../../assets/fonts/fonts-woff_woff2/Rubik-Light.woff') format('woff');
+  src: url('../../../assets/fonts/fonts-woff_woff2/Rubik-Light.woff2') format('woff2');
+  src: url('../../../assets/fonts/fonts-tff/Rubik/static/Rubik-Light.ttf') format('truetype');
+
+}
+
+@font-face {
+  font-family: 'Rubik-bold';
+  src: url('../../../assets/fonts/fonts-woff_woff2/Rubik-Bold.woff') format('woff');
+  src: url('../../../assets/fonts/fonts-woff_woff2/Rubik-Bold.woff2') format('woff2');
+  src: url('../../../assets/fonts/fonts-tff/Rubik/static/Rubik-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'RussoOne';
+  src: url('../../../assets/fonts/fonts-woff_woff2/RussoOne-Regular.woff') format('woff');
+  src: url('../../../assets/fonts/fonts-woff_woff2/RussoOne-Regular.woff2') format('woff2');
+  src: url('../../../assets/fonts/fonts-tff/Russo_One/RussoOne-Regular.ttf') format('truetype');
+
+}
+
+$primaryColor: #060606;
+$primaryColor--light: #161616;
+$secondaryColor: #00AEFF;
+$secondaryColor--dark: #004565;
+
+$complementColor: #FFFFFF;
+
+@mixin border-shockbyte($width, $radius: 5px) {
+  border: $width solid $secondaryColor;
+  border-radius: $radius;
+}
+
+@mixin flex-default($wrap: wrap) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: $wrap;
+}
+
+@mixin flex-list {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+@mixin gradientEffect-before($color1, $color2, $direction, $from) {
+  background-image: linear-gradient(to $direction, $color1 49%, $color2 50%);
+  background-size: 300%;
+  background-position: $from;
+  transition: background .5s ease-in-out;
+}
+
+@mixin gradientEffect-after($to) {
+  background-position: $to;
+  transition: background .5s ease-in-out;
+}
