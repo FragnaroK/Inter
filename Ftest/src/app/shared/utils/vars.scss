@@ -33,11 +33,11 @@ $complementColor: #FFFFFF;
   border-radius: $radius;
 }
 
-@mixin flex-default($wrap: wrap) {
+@mixin flex-default($direction: column, $justify-content: center, $align-items:center, $wrap: wrap) {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: $direction;
+  justify-content: $justify-content;
+  align-items: $align-items;
   flex-wrap: $wrap;
 }
 
@@ -59,4 +59,15 @@ $complementColor: #FFFFFF;
 @mixin gradientEffect-after($to) {
   background-position: $to;
   transition: background .5s ease-in-out;
+}
+
+.shockBtn1 {
+  background-color: $secondaryColor;
+  border: none;
+  border-radius: 0;
+}
+
+.shockBtn2 {
+  @include border-shockbyte(2px, 0);
+  background-color: transparent;
 }

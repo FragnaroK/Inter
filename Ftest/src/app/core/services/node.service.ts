@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Node } from '../models/node/node.model';
+import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NodeService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   nodes: any[] = [
     {
@@ -409,7 +413,12 @@ export class NodeService {
     },
   ];
 
-  getNodes(): any[] {
+  getNodes(page: number): Observable<Node[]> {
+    return this.http.get<Node[]>(
+      `${environment.API}?p=${page.toString()}&l=20`
+    );
+  }
+  getNodesOffline(): Node[] {
     return this.nodes;
   }
 }

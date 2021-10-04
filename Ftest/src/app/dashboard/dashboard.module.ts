@@ -26,5 +26,6 @@ import { GetPercentPipe } from '../shared/pipes/get-percent.pipe';
     GetPercentPipe,
   ],
   imports: [CommonModule, DashboardRoutingModule, NgxChartsModule],
+  providers: [],
 })
 export class DashboardModule {}

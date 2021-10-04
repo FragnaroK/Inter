@@ -12,3 +12,22 @@
   color: white;
   background: #060606;
 }
+
+::ng-deep::-webkit-scrollbar {
+  width: 13px;
+  background: $primaryColor--light;
+}
+
+::ng-deep::-webkit-scrollbar-thumb {
+  border: 1px solid $secondaryColor;
+  border-radius: 10px;
+  background: $primaryColor--light;
+}
+
+::ng-deep::-webkit-scrollbar-thumb:hover {
+  background: $primaryColor;
+}
+
+::ng-deep::-webkit-scrollbar-thumb:active {
+  background: $secondaryColor--dark;
+}

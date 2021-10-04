@@ -99,7 +99,7 @@ I didn't have enough time to start coding the design but I finished with showing
 
 I made a pipe to transform MB to GB and have more readable data.
 
-## Day 3 - Finishing structure and test data showing
+## Day 3 (three) - Finishing structure and test data showing
 
 I'm finishing the last table `node-details` to show detailed info about the clicked node. I'm doing some research about charts and some libraries, I find one who seems to be efficient and easy to implement.
 
@@ -136,3 +136,67 @@ Finished a part of the design:
 - Details table data showing correctly and sync with clicks in the list of previews
 
 Tomorrow I'm going to finish with the design and then focus in **the API and self update**
+
+## Day 4 (four) - Finishing with design building
+
+Design almost finished, just a few things to do like add some logos and icons.
+All works perfectly, I also connected the API and it gets the data correctly.
+
+I was experimenting with the **API** endpoint in Postman. I realize that when I want to get the data sorted by id and order desc to get the last node id (just to know how many pages it will have) **it return the wrong data**... like this:
+
+        [
+            {
+                "id": "9",
+                "free_ram": 44522,
+                "allocated_ram": 3982,
+                "free_disk": 92513,
+                "allocated_disk": 8092,
+                "up_since": "2020-11-05T09:15:56.990Z"
+            },
+            {
+                "id": "8",
+                "free_ram": 98731,
+                "allocated_ram": 61995,
+                "free_disk": 10480,
+                "allocated_disk": 78095,
+                "up_since": "2020-06-12T05:01:21.120Z"
+            },
+            {
+                "id": "7",
+                "free_ram": 98757,
+                "allocated_ram": 29573,
+                "free_disk": 5942,
+                "allocated_disk": 82648,
+                "up_since": "2020-07-08T15:14:38.716Z"
+            },
+            {
+                "id": "6",
+                "free_ram": 79420,
+                "allocated_ram": 25182,
+                "free_disk": 58168,
+                "allocated_disk": 66241,
+                "up_since": "2020-10-29T14:11:19.214Z"
+            },
+            {
+                "id": "50",
+                "free_ram": 53800,
+                "allocated_ram": 3864,
+                "free_disk": 37317,
+                "allocated_disk": 49979,
+                "up_since": "2020-07-26T21:04:56.969Z"
+            }
+        ]
+
+And this is the request:
+
+> https://600f10ec6c21e1001704e67a.mockapi.io/api/v1/stats?sortBy=id&order=desc&p=1&l=5
+
+I couldn't find anything about this issue, so my solution for now is don't put pagination like:
+
+> **< 1 - 2 - 3 - 4 - 5 - 6 >**
+
+Just something like this:
+
+> **< >** or **Previous - Next**
+
+And en each click on _Next_, send a request. If there is a page, then save its content and show it, but if there isn't a page just a message about it. The request happens only if there is any changes or new content, not every time you click.

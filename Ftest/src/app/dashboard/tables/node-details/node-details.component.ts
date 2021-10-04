@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { LegendPosition, ScaleType } from '@swimlane/ngx-charts';
-import { GetPercentPipe } from 'src/app/shared/pipes/get-percent.pipe';
+import { Node } from 'src/app/core/models/node/node.model';
 
 @Component({
   selector: 'node-details',
@@ -10,8 +10,16 @@ import { GetPercentPipe } from 'src/app/shared/pipes/get-percent.pipe';
 export class NodeDetailsComponent implements OnInit {
   constructor() {}
 
-  @Input() node?: any;
+  @Input() node?: Node;
   @Input() index?: number;
+  @Input()
+  @Input()
+  show: boolean = false;
+  @Output() hideD = new EventEmitter();
+
+  toggleShow() {
+    return this.hideD.emit(false);
+  }
 
   primaryColor: string = '#00AEFF';
   secondaryColor: string = '#004565';

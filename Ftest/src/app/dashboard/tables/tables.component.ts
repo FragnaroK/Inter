@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Node } from 'src/app/core/models/node/node.model';
 
 @Component({
   selector: 'tables-stats',
@@ -9,13 +10,19 @@ export class TablesComponent implements OnInit {
   constructor() {}
 
   nodeClicked: any;
-  @Input() nodes?: any[any]; // Get nodes
+  show: boolean = false;
+
+  @Input() nodes?: Node[]; // Get nodes
 
   ngOnInit(): void {
-    this.showNode(this.nodes[0]); // Assign Default data if any node was selected - Just for Desktop, because in mobile this table appear overlay
+    this.showNode(this.nodes![0]); // Assign Default data if any node was selected - Just for Desktop, because in mobile this table appear overlay
   }
-
-  showNode(node: any) {
+  toggleStats = (e: any) => {
+    this.show = e;
+    console.log('table', e);
+    console.log('table', this.show);
+  };
+  showNode(node: Node) {
     // Assing node seleceted to send it to child component
     this.nodeClicked = node;
   }

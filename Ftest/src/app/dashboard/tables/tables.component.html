@@ -12,11 +12,17 @@
         [index]="nodes.indexOf(node)"
         [node]="node"
         (sendNode)="showNode(node)"
+        (selected)="toggleStats($event)"
       ></node-preview>
     </div>
     <div *ngIf="!nodes" class="error-msg">Error loading content...</div>
   </div>
   <div class="tables__node-details">
-    <node-details [node]="nodeClicked" [index]="nodeClicked?.id"></node-details>
+    <node-details
+      (hideD)="toggleStats($event)"
+      [show]="show"
+      [node]="nodeClicked"
+      [index]="nodeClicked?.id"
+    ></node-details>
   </div>
 </div>

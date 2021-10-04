@@ -6,8 +6,8 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  margin: 5px 0 5px 0;
-  width: 100%;
+  margin: 5px auto;
+  width: 98%;
   height: 60px;
   background-color: $primaryColor;
 
@@ -19,7 +19,7 @@
   }
 
   &__info {
-    @include flex-default;
+    @include flex-default($direction: row, $justify-content: space-around);
     width: 60%;
     height: 100%;
 
@@ -29,6 +29,7 @@
 
 
       span {
+        width: 30px;
         color: $complementColor;
       }
     }
@@ -37,8 +38,5 @@
   &__show {
     width: 20%;
     height: 100%;
-    background-color: $secondaryColor;
-    border: none;
-    border-radius: 0;
   }
 }

@@ -7,6 +7,7 @@ ul {
 header {
   position: sticky;
   top: 0;
+  z-index: 100;
   display: grid;
   align-items: center;
   justify-items: center;
@@ -120,3 +121,5 @@ header {
 
 
 }
+
+@media (min-width: 1000px) {}

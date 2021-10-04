@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Color, LegendPosition, ScaleType } from '@swimlane/ngx-charts';
+import { Node } from 'src/app/core/models/node/node.model';
 import { GetPercentPipe } from 'src/app/shared/pipes/get-percent.pipe';
 
 @Component({
@@ -12,7 +13,7 @@ export class ChartComponent implements OnInit {
 
   percent = new GetPercentPipe();
 
-  _node: any;
+  _node!: Node;
   data!: any[];
   primaryColor: string = '#00AEFF';
   secondaryColor: string = '#004565';
@@ -23,7 +24,7 @@ export class ChartComponent implements OnInit {
     // This allow me to hear any changes in the Input
     return this._node;
   }
-  set node(node: any) {
+  set node(node: Node) {
     this._node = node;
     this.generateCharts(this._node);
   }
@@ -49,7 +50,7 @@ export class ChartComponent implements OnInit {
     node: any // Check if this chart is for ram or disk
   ) => (this.dataType === 'ram' ? this.fetchRam(node) : this.fetchDisk(node));
 
-  fetchDisk(node: any) {
+  fetchDisk(node: Node) {
     // Assign disk data to an Array with objects -- Also utilized to reAssign data on changes
     let totalDisk = node.allocated_disk + node.free_disk;
     let data = [
@@ -65,7 +66,7 @@ export class ChartComponent implements OnInit {
     this.data = [...data];
   }
 
-  fetchRam(node: any) {
+  fetchRam(node: Node) {
     // Assign ram data to an Array with objects -- Also utilized to reAssign data on changes
     let totalRam = node.allocated_ram + node.free_ram;
     let data = [

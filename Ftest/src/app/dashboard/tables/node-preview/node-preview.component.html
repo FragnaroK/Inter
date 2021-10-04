@@ -8,5 +8,11 @@
       FR: <span> {{ node.free_ram | toGB }} </span> GB
     </p>
   </div>
-  <button class="node__show" (click)="selectNode(node)">></button>
+  <button
+    class="shockBtn1 node__show"
+    (click)="selectNode(node)"
+    (click)="selectedEvent()"
+  >
+    >
+  </button>
 </div>

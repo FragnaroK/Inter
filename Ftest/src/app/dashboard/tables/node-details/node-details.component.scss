@@ -1,1 +1,148 @@
+@import '../../../shared/utils/vars.scss';
 
+.show-details {
+  left: 0 !important;
+  transition: left .5s ease-in-out;
+}
+
+.node-details {
+  position: fixed;
+  left: 100%;
+  top: 0;
+  z-index: 200;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: [header] 5% [details] 95%;
+  grid-template-areas:
+    "header"
+    "details";
+  margin: 0 0 20px 0;
+  width: 100%;
+  height: 100%;
+  background-color: $primaryColor--light;
+  transition: left .5s ease-in-out;
+
+  &__header {
+    grid-area: header;
+    @include flex-default($direction: row, $justify-content: space-between);
+    width: 100%;
+    height: 5%;
+    min-height: 45px;
+    background-color: $primaryColor;
+
+    &__id,
+    &__date {
+      @include flex-default(row);
+
+      i {
+        margin-right: 5px;
+      }
+    }
+
+    &__id {
+      width: 10%;
+      height: 100%;
+      background-color: $secondaryColor;
+      @include border-shockbyte(2px, 0);
+    }
+
+    &__date {
+      width: 80%;
+      height: 100%;
+
+      i {
+        color: $secondaryColor;
+      }
+    }
+
+    &__closeBtn {
+      color: $secondaryColor;
+      width: 10%;
+      height: 100%;
+    }
+  }
+
+  // Finish Header
+
+  &__details {
+    grid-area: details;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: [disk] 50% [ram] 50%;
+    margin-top: 8%;
+    width: 100%;
+    height: 90%;
+
+
+    .stats-structure {
+      display: grid;
+      grid-template-columns: [text-stats] 50% [chart] 50%;
+      grid-template-rows: [title] 10% [stats] 90%;
+      grid-template-areas:
+        "title-stat title-stat"
+        "text-stats chart";
+      width: 100%;
+      height: 100%;
+
+      .details__title {
+        grid-area: title-stat;
+        @include flex-default;
+      }
+
+      .details__text {
+        grid-area: text-stats;
+        @include flex-default($align-items: flex-start);
+        padding-left: 10%;
+
+        p {
+          line-height: clamp(40px, 150%, 50px);
+          color: $secondaryColor;
+
+          span {
+            color: $complementColor;
+          }
+        }
+      }
+
+      .charts {
+        grid-area: chart;
+
+      }
+    }
+  }
+
+}
+
+@media (min-width:1000px) {
+  .node-details {
+    position: relative;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: [header] 5% [details] 95%;
+    grid-template-areas:
+      "header"
+      "details";
+    margin: 0 0 20px 0;
+    width: 100%;
+    height: 100%;
+    background-color: $primaryColor--light;
+    transition: left .5s ease-in-out;
+
+    &__details {
+      grid-area: details;
+      display: grid;
+      grid-template-columns: 100%;
+      grid-template-rows: [disk] 50% [ram] 50%;
+      margin-top: 8%;
+      width: 100%;
+      height: 90%;
+    }
+  }
+
+  .node-details__header__closeBtn {
+    display: none;
+  }
+}
