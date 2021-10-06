@@ -5,7 +5,7 @@
 <div *ngIf="nodes.length !== 0" class="nodes__list" id="list-nodes">
   <node-preview
     *ngFor="let node of nodes[index]"
-    [index]="node.id"
+    [index]="nodes[index].indexOf(node) + 1"
     [node]="node"
     (sendNode)="showNode(node)"
     (selected)="toggleStats($event)"

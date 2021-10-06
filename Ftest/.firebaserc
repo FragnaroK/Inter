@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "shockbytedashboard": {
+      "hosting": {
+        "Ftest": [
+          "shockbytedashboard"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "shockbytedashboard"
+  }
+}

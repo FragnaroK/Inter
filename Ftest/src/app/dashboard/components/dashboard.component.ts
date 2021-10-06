@@ -4,6 +4,7 @@ import { Node } from 'src/app/core/models/node/node.model';
 import { interval, Subscription } from 'rxjs';
 import { retry, startWith, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
+import * as lodash from 'lodash';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,13 +34,13 @@ export class DashboardComponent implements OnInit {
   constructor(private nodes_api: NodeService) {}
 
   ngOnInit(): void {
-    // this.fetchNodes();
+    this.fetchNodes();
     this.checkErrors();
   }
 
   fetchNodes() {
+    /* Initialize data */
     var page = 0; // Just a count to check different pages
-
     this.initInterval = interval(1000) // It sends a request every 1s until return a page with less nodes than the limit, which is 20 per page
       .pipe(
         startWith(0),
@@ -59,9 +60,11 @@ export class DashboardComponent implements OnInit {
           this.totalNodes += nodes.length; // Count Nodes in every call
           this.afterFetch(nodes); // check en every call the most recents nodes
           //- it is not really necesary, because the list comes sorted by date, but in case that the request change then it will get the new nodes anyway
+          this.lastNode = this.getLastNode(this.nodes);
           page++;
         },
         (err) => {
+          this.checkErrors();
           console.log(
             new Error('dashboard.component - Error initInterval: '),
             err
@@ -71,7 +74,7 @@ export class DashboardComponent implements OnInit {
           );
         }
       );
-
+    /* update Data */
     var totalNodesDraft = 0;
     this.updDataInterval = interval(300000) // the only difference: It starts After the initInterval and execute every 5 minutes (time in ms)
       .pipe(
@@ -81,9 +84,6 @@ export class DashboardComponent implements OnInit {
       )
       .subscribe(
         (nodes) => {
-          page === 0 // the same begining, checking more resent - I just realize comenting this, If the request change it will save the wrong one - I don't have time to fix it
-            ? (this.lastNode = moment(nodes[0].up_since).format('ddd, MMM DD'))
-            : null;
           nodes.length === 0 // If this page doesn't have any node, then reasign "pages" to start again
             ? (page = 0)
             : this.checkChanges(this.nodes[page], nodes) // but if it have, then check if the pages are equals or there is any change
@@ -94,9 +94,11 @@ export class DashboardComponent implements OnInit {
             ? (this.totalNodes = totalNodesDraft)
             : null;
           this.afterFetch(nodes); // get new nodes
+          this.lastNode = this.getLastNode(this.nodes);
           page++; // next request to the next page
         },
         (err) => {
+          this.checkErrors();
           console.log(
             new Error('dashboard.component - Error updInterval: '),
             err
@@ -132,7 +134,6 @@ export class DashboardComponent implements OnInit {
     // change date format
     return moment(date).utc().format('yyyy-MM-DDTHH:mm:ss.SSS').toString();
   }
-
   checkErrors() {
     const errorCheck = setInterval(() => {
       // Error notifications - console
@@ -151,5 +152,23 @@ export class DashboardComponent implements OnInit {
         : clearInterval(errorCheck);
       console.groupEnd();
     }, 5000);
+  }
+
+  getLastNode(nodes: any[]): string {
+    let newNodes: Node[] = [];
+    let lastNode: Node[] = [];
+
+    nodes.forEach((page: Node[]) => {
+      page.forEach((node: Node) => newNodes.push(node));
+    });
+
+    lastNode = lodash.orderBy(
+      newNodes,
+      (node) => moment(node.up_since).format('YYYYMMDD'),
+      'desc'
+    );
+    return lastNode
+      ? moment(lastNode[0].up_since).format('ddd, MMM DD')
+      : 'Not Found';
   }
 }
