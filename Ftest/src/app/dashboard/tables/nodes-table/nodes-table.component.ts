@@ -37,7 +37,16 @@ export class NodesTableComponent implements OnInit {
         : console.log('No previous page')
       : console.error(new Error('An error ocurred with pagination'));
   }
+  getIndex(nodes: any[], node: Node) {
+    let allNodes: Node[] = [];
+    nodes.forEach((page: Node[]) => {
+      page.forEach((node: Node) => {
+        allNodes.push(node);
+      });
+    });
 
+    return allNodes.indexOf(node);
+  }
   toggleStats = (e: any) => {
     // send event to open details window
     this.toggle.emit(e);

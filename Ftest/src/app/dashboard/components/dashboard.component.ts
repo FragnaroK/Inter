@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NodeService } from 'src/app/core/services/node.service';
 import { Node } from 'src/app/core/models/node/node.model';
-import { interval, Subscription } from 'rxjs';
-import { retry, startWith, switchMap } from 'rxjs/operators';
+import { EMPTY, empty, interval, of, Subscription, timer } from 'rxjs';
+import { catchError, retry, startWith, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
 import * as lodash from 'lodash';
 
@@ -31,10 +31,11 @@ export class DashboardComponent implements OnInit {
       .toString(),
   };
 
-  constructor(private nodes_api: NodeService) {}
+  constructor(private nodes_api: NodeService) {
+    this.fetchNodes();
+  }
 
   ngOnInit(): void {
-    this.fetchNodes();
     this.checkErrors();
   }
 
@@ -46,6 +47,12 @@ export class DashboardComponent implements OnInit {
         startWith(0),
         switchMap(() => this.nodes_api.getNodes(page + 1)),
         retry(3) // if there is an error, retry at least 3 times
+      )
+      .pipe(
+        catchError((error) => {
+          console.error(new Error('Error during initfetch to DB'), error);
+          return EMPTY;
+        })
       )
       .subscribe(
         (nodes) => {
@@ -76,17 +83,23 @@ export class DashboardComponent implements OnInit {
       );
     /* update Data */
     var totalNodesDraft = 0;
-    this.updDataInterval = interval(300000) // the only difference: It starts After the initInterval and execute every 5 minutes (time in ms)
+    this.updDataInterval = timer(10000, 300000) // the only difference: It starts After the initInterval and execute every 5 minutes (time in ms)
       .pipe(
-        startWith(100000),
         switchMap(() => this.nodes_api.getNodes(page + 1)),
         retry(5)
+      )
+      .pipe(
+        catchError((error) => {
+          console.error(new Error('Error during updfetch to DB'), error);
+          return EMPTY;
+        })
       )
       .subscribe(
         (nodes) => {
           nodes.length === 0 // If this page doesn't have any node, then reasign "pages" to start again
             ? (page = 0)
-            : this.checkChanges(this.nodes[page], nodes) // but if it have, then check if the pages are equals or there is any change
+            : null;
+          this.checkChanges(this.nodes[page], nodes) // but if it have, then check if the pages are equals or there is any change
             ? (this.nodes[page] = [...nodes]) // If there is any change, save the requested page
             : null;
           totalNodesDraft += nodes.length; // check the total nodes
@@ -96,6 +109,7 @@ export class DashboardComponent implements OnInit {
           this.afterFetch(nodes); // get new nodes
           this.lastNode = this.getLastNode(this.nodes);
           page++; // next request to the next page
+          console.log('sigue');
         },
         (err) => {
           this.checkErrors();
@@ -121,13 +135,33 @@ export class DashboardComponent implements OnInit {
 
     // save the last new node into lastNode
   }
-  checkChanges(prevNodes: Node[], comingNodes: Node[]): boolean {
-    // check differences between two arrays
-    let changes = false;
-    prevNodes.forEach((node) => {
-      // check each node in the original array, if someone is different, return true;
-      comingNodes.some((n) => n === node) ? (changes = true) : null;
+  getLastNode(nodes: any[]): string {
+    let newNodes: Node[] = [];
+    let lastNode: Node[] = [];
+
+    nodes.forEach((page: Node[]) => {
+      page.forEach((node: Node) => newNodes.push(node));
     });
+
+    lastNode = lodash.orderBy(
+      newNodes,
+      (node) => moment(node.up_since).format('YYYYMMDD'),
+      'desc'
+    );
+    return lastNode
+      ? moment(lastNode[0].up_since).format('ddd, MMM DD')
+      : 'Not Found';
+  }
+
+  checkChanges(prevNodes: Node[], comingNodes: Node[]): boolean {
+    let changes = false;
+    // check differences between two arrays
+    if (comingNodes.length !== 0) {
+      prevNodes.forEach((node) => {
+        // check each node in the original array, if someone is different, return true;
+        comingNodes.some((n) => n === node) ? (changes = true) : null;
+      });
+    }
     return changes ? true : false; // there are changes? yes or no;
   }
   nodesDateFormat(date: string): string {
@@ -152,23 +186,5 @@ export class DashboardComponent implements OnInit {
         : clearInterval(errorCheck);
       console.groupEnd();
     }, 5000);
-  }
-
-  getLastNode(nodes: any[]): string {
-    let newNodes: Node[] = [];
-    let lastNode: Node[] = [];
-
-    nodes.forEach((page: Node[]) => {
-      page.forEach((node: Node) => newNodes.push(node));
-    });
-
-    lastNode = lodash.orderBy(
-      newNodes,
-      (node) => moment(node.up_since).format('YYYYMMDD'),
-      'desc'
-    );
-    return lastNode
-      ? moment(lastNode[0].up_since).format('ddd, MMM DD')
-      : 'Not Found';
   }
 }
