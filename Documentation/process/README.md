@@ -233,3 +233,57 @@ And en each click on _Next_, send a request. If there is a page, then save its c
 And that's all. Now I'm going to set up firebase, but **First** I'm going to push it to GitHub and when I finish with firebase, I will push again and merge:
 
 > development -> main
+
+After doing that, I will do the following:
+
+1. I will create a project in firebase console, then I will install firebase tools to this project
+2. To install firebase, I'm going to do the following:
+
+   - Install firebase with `npm install firebase` and firebase tools `npm install -g firebase-tools` and for angular (library) `ng add @angular/fire`
+
+   - Configure `environment.prod.ts`
+
+     > firebaseConfig: {
+     > apiKey: 'AIzaSyCdRsoizr4I-uZ9cIcUu_vDqI9-PXNJRjI',
+     > authDomain: 'shockbytedashboard.firebaseapp.com',
+     > projectId: 'shockbytedashboard',
+     > storageBucket: 'shockbytedashboard.appspot.com',
+     > messagingSenderId: '507421431662',
+     > appId: '1:507421431662:web:ddb088c11ba06206a8137f',
+     > },
+
+   - Add the required configuration in `app.module.ts`
+
+     - Imports required:
+
+       > import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+
+     - Add to imports and initialize:
+
+       > imports: [provideFirebaseApp(() => initializeApp(environment.firebaseConfig))]
+
+   - Run `firebase init` in terminal.
+
+     - Configure `firebase.json`:
+
+       > "hosting": {
+       > "public": "dist/Ftest",
+       > "ignore": [
+       >
+       > > "firebase.json",
+       > > "_[_/.\*]",
+       > > "**/node_modules/**"
+       > > ],
+       > > "rewrites": [
+       > >
+       > > > > {
+       > > > > "source": "\*\*",
+       > > > > "destination": "/index.html"
+       > > > > }]
+       > > > > }
+
+   - Finally, Run `ng build -c production` and when finish `firebase deploy`
+
+[Project deployed :D!](https://shockbytedashboard.web.app)
+
+# FINISHED
