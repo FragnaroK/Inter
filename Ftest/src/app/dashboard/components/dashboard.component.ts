@@ -80,7 +80,6 @@ export class DashboardComponent implements OnInit {
       );
     /* update Data */
     var updPages = 0;
-    var totalNodesDraft = 0; // to calculate total nodes
     this.updDataInterval = timer(100000, 300000) // the only difference: It starts After the initInterval and execute every 5 minutes (time in ms)
       .pipe(
         switchMap(() => this.nodes_api.getNodes(updPages + 1)),
@@ -94,10 +93,6 @@ export class DashboardComponent implements OnInit {
             : null;
           this.checkChanges(this.nodes[updPages], nodes) // but if it have, then check if the pages are equals or there is any change
             ? (this.nodes[updPages] = [...nodes]) // If there is any change, save the requested page
-            : null;
-          totalNodesDraft += nodes.length; // check the total nodes
-          totalNodesDraft > this.totalNodes
-            ? (this.totalNodes = totalNodesDraft)
             : null;
           this.afterFetch(nodes); // get new nodes
           this.lastNode = this.getLastNode(this.nodes);
@@ -136,9 +131,11 @@ export class DashboardComponent implements OnInit {
     let lastNode: Node[] = [];
 
     nodes.forEach((page: Node[]) => {
-      page.forEach((node: Node) => newNodes.push(node));
+      page.forEach((node: Node) => {
+        newNodes.push(node);
+      });
     });
-
+    this.totalNodes = newNodes.length;
     lastNode = lodash.orderBy(
       newNodes,
       (node) => moment(node.up_since).format('YYYYMMDD'),
