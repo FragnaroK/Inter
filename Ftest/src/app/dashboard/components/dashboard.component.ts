@@ -2,7 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { NodeService } from 'src/app/core/services/node.service';
 import { Node } from 'src/app/core/models/node/node.model';
 import { EMPTY, empty, interval, of, Subscription, timer } from 'rxjs';
-import { catchError, retry, startWith, switchMap } from 'rxjs/operators';
+import {
+  catchError,
+  repeat,
+  retry,
+  startWith,
+  switchMap,
+} from 'rxjs/operators';
 import * as moment from 'moment';
 import * as lodash from 'lodash';
 
@@ -42,23 +48,14 @@ export class DashboardComponent implements OnInit {
   fetchNodes() {
     /* Initialize data */
     var page = 0; // Just a count to check different pages
-    this.initInterval = interval(1000) // It sends a request every 1s until return a page with less nodes than the limit, which is 20 per page
+    this.initInterval = timer(0, 1000) // It sends a request every 1s until return a page with less nodes than the limit, which is 20 per page
       .pipe(
-        startWith(0),
         switchMap(() => this.nodes_api.getNodes(page + 1)),
         retry(3) // if there is an error, retry at least 3 times
       )
-      .pipe(
-        catchError((error) => {
-          console.error(new Error('Error during initfetch to DB'), error);
-          return EMPTY;
-        })
-      )
+      .pipe(repeat(3))
       .subscribe(
         (nodes) => {
-          page === 0 // If it is the first page, then save the first node into "lastNode", because the request is to get nodesList sort by date
-            ? (this.lastNode = moment(nodes[0].up_since).format('ddd, MMM DD'))
-            : null;
           nodes.length === 0 // If the response doesn't have any nodes, then reasign "page" with 0 to restart the counting and unsubscribe to stop this interval
             ? ((page = 0), this.initInterval.unsubscribe())
             : nodes.length < 20 // But, if it have nodes inside, check if it is the only or last page.
@@ -82,25 +79,21 @@ export class DashboardComponent implements OnInit {
         }
       );
     /* update Data */
-    var totalNodesDraft = 0;
-    this.updDataInterval = timer(10000, 300000) // the only difference: It starts After the initInterval and execute every 5 minutes (time in ms)
+    var updPages = 0;
+    var totalNodesDraft = 0; // to calculate total nodes
+    this.updDataInterval = timer(100000, 300000) // the only difference: It starts After the initInterval and execute every 5 minutes (time in ms)
       .pipe(
-        switchMap(() => this.nodes_api.getNodes(page + 1)),
+        switchMap(() => this.nodes_api.getNodes(updPages + 1)),
         retry(5)
       )
-      .pipe(
-        catchError((error) => {
-          console.error(new Error('Error during updfetch to DB'), error);
-          return EMPTY;
-        })
-      )
+      .pipe(repeat(3))
       .subscribe(
         (nodes) => {
-          nodes.length === 0 // If this page doesn't have any node, then reasign "pages" to start again
-            ? (page = 0)
+          page === updPages // If this page doesn't have any node, then reasign "pages" to start again
+            ? (updPages = 0)
             : null;
-          this.checkChanges(this.nodes[page], nodes) // but if it have, then check if the pages are equals or there is any change
-            ? (this.nodes[page] = [...nodes]) // If there is any change, save the requested page
+          this.checkChanges(this.nodes[updPages], nodes) // but if it have, then check if the pages are equals or there is any change
+            ? (this.nodes[updPages] = [...nodes]) // If there is any change, save the requested page
             : null;
           totalNodesDraft += nodes.length; // check the total nodes
           totalNodesDraft > this.totalNodes
@@ -108,7 +101,10 @@ export class DashboardComponent implements OnInit {
             : null;
           this.afterFetch(nodes); // get new nodes
           this.lastNode = this.getLastNode(this.nodes);
-          page++; // next request to the next page
+          updPages++; // next request to the next page
+          page === updPages // If this page doesn't have any node, then reasign "pages" to start again
+            ? (updPages = 0)
+            : null;
           console.log('sigue');
         },
         (err) => {
