@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NodeService } from 'src/app/core/services/node.service';
 import { Node } from 'src/app/core/models/node/node.model';
+import { interval, Subscription } from 'rxjs';
+import { retry, startWith, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
-import * as lodash from 'lodash';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,11 +11,15 @@ import * as lodash from 'lodash';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  test: boolean = true;
-  nodes: Node[] = [];
+  // Intervals to start "Polling" and maintain the dashboard updated every 5 minutes
+  initInterval!: Subscription; // Interval executed in Init to fetch all the pages availables, when finish, it will unsubscribe and not work anymore
+  updDataInterval!: Subscription; // Interval executed after "initInterval" to update data every 5 minutes
+
+  // Var
+  nodes: any[] = [];
+  totalNodes: number = 0;
   newNodes: number = 0;
   lastNode: string = '';
-  sortedNodes!: Node[];
 
   dateRange = {
     start: moment().local().format('yyyy-MM-DDTHH:mm:ss.SSS').toString(),
@@ -26,80 +31,125 @@ export class DashboardComponent implements OnInit {
   };
 
   constructor(private nodes_api: NodeService) {}
+
   ngOnInit(): void {
-    this.test ? this.fetchNodesOffline() : this.fetchNodes();
+    // this.fetchNodes();
+    this.checkErrors();
   }
-  /* DEV FETCH */
-  fetchNodesOffline() {
-    // Using a function from Nodes Service to get the Nodes in the API
-    this.nodes_api.getNodesOffline().forEach((node) => {
-      // push each node to nodes
-      this.nodes.push(node);
-      // push new node to newNodes:
-      //"If this node is new (last 24h), then push to newNodes. But if not, don't do anything"
-      moment(this.nodesDateFormat(node.up_since)).isAfter(this.dateRange.end)
-        ? this.newNodes++
-        : null;
-    });
 
-    // push the list of nodes sorted ascending into sortedNodes
-    this.sortedNodes = this.sortNodesByDate(this.nodes, false);
-
-    // save the last new node into lastNode
-    this.lastNode = moment(this.sortedNodes[0].up_since).format(
-      'ddd, MMM DD LT'
-    );
-  }
-  /* PROD FETCH*/
   fetchNodes() {
-    // Using a function from Nodes Service to get the Nodes in the API
-    this.nodes_api.getNodes(1).subscribe(
-      (node) => {
-        // push each node to nodes
-        this.nodes = node;
-        this.afterFetch(node); // sort and organize data
-      },
-      (err) => console.error('Error on Get', new Error(err))
-    );
+    var page = 0; // Just a count to check different pages
+
+    this.initInterval = interval(1000) // It sends a request every 1s until return a page with less nodes than the limit, which is 20 per page
+      .pipe(
+        startWith(0),
+        switchMap(() => this.nodes_api.getNodes(page + 1)),
+        retry(3) // if there is an error, retry at least 3 times
+      )
+      .subscribe(
+        (nodes) => {
+          page === 0 // If it is the first page, then save the first node into "lastNode", because the request is to get nodesList sort by date
+            ? (this.lastNode = moment(nodes[0].up_since).format('ddd, MMM DD'))
+            : null;
+          nodes.length === 0 // If the response doesn't have any nodes, then reasign "page" with 0 to restart the counting and unsubscribe to stop this interval
+            ? ((page = 0), this.initInterval.unsubscribe())
+            : nodes.length < 20 // But, if it have nodes inside, check if it is the only or last page.
+            ? (this.nodes.push(nodes), this.initInterval.unsubscribe()) // If  there are less nodes than the limit, save these nodes and unsubscribe to stop the interval;
+            : this.nodes.push(nodes); // And finishing, if all is okay and there are the limit of nodes, save them
+          this.totalNodes += nodes.length; // Count Nodes in every call
+          this.afterFetch(nodes); // check en every call the most recents nodes
+          //- it is not really necesary, because the list comes sorted by date, but in case that the request change then it will get the new nodes anyway
+          page++;
+        },
+        (err) => {
+          console.log(
+            new Error('dashboard.component - Error initInterval: '),
+            err
+          );
+          console.error(
+            new Error('there was a problem during fetcg with initInterval')
+          );
+        }
+      );
+
+    var totalNodesDraft = 0;
+    this.updDataInterval = interval(300000) // the only difference: It starts After the initInterval and execute every 5 minutes (time in ms)
+      .pipe(
+        startWith(100000),
+        switchMap(() => this.nodes_api.getNodes(page + 1)),
+        retry(5)
+      )
+      .subscribe(
+        (nodes) => {
+          page === 0 // the same begining, checking more resent - I just realize comenting this, If the request change it will save the wrong one - I don't have time to fix it
+            ? (this.lastNode = moment(nodes[0].up_since).format('ddd, MMM DD'))
+            : null;
+          nodes.length === 0 // If this page doesn't have any node, then reasign "pages" to start again
+            ? (page = 0)
+            : this.checkChanges(this.nodes[page], nodes) // but if it have, then check if the pages are equals or there is any change
+            ? (this.nodes[page] = [...nodes]) // If there is any change, save the requested page
+            : null;
+          totalNodesDraft += nodes.length; // check the total nodes
+          totalNodesDraft > this.totalNodes
+            ? (this.totalNodes = totalNodesDraft)
+            : null;
+          this.afterFetch(nodes); // get new nodes
+          page++; // next request to the next page
+        },
+        (err) => {
+          console.log(
+            new Error('dashboard.component - Error updInterval: '),
+            err
+          );
+          console.error(
+            new Error('there was a problem during fetcg with updInterval')
+          );
+        }
+      );
   }
 
   afterFetch(nodes: Node[]) {
     // Count new Nodes:
     //"If this node is new (last 24h), then add 1 to NewNodes. But if not, don't do anything"
-    nodes.forEach((node) => {
-      moment(this.nodesDateFormat(node.up_since)).isAfter(this.dateRange.end)
-        ? this.newNodes++
+    nodes.forEach((node: Node) => {
+      moment(this.nodesDateFormat(node.up_since)).isAfter(this.dateRange.end) // format date string and check if this date is less than a day ago
+        ? this.newNodes++ // if it is, save it
         : null;
     });
 
-    // push the list of nodes sorted ascending into sortedNodes
-    this.sortedNodes = this.sortNodesByDate(nodes, true);
-
     // save the last new node into lastNode
-    this.lastNode = moment(this.sortedNodes[0].up_since).format(
-      'ddd, MMM DD LT'
-    );
   }
-
-  // Simple function: first Arg is the list to sort,
-  // second Arg [false === "descendent"], [true === "ascendent"]
-  sortNodesByDate(nodes: Node[], option: Boolean): Node[] {
-    return option
-      ? lodash.orderBy(
-          // TRUE
-          nodes,
-          (node) => moment(node.up_since).format('YYYYMMDD'),
-          'asc'
-        )
-      : lodash.orderBy(
-          // FALSE
-          nodes,
-          (node) => moment(node.up_since).format('YYYYMMDD'), // first arg: the list to sort,
-          'desc' // second arg: the node date and format,
-        ); // third arg: type of order
+  checkChanges(prevNodes: Node[], comingNodes: Node[]): boolean {
+    // check differences between two arrays
+    let changes = false;
+    prevNodes.forEach((node) => {
+      // check each node in the original array, if someone is different, return true;
+      comingNodes.some((n) => n === node) ? (changes = true) : null;
+    });
+    return changes ? true : false; // there are changes? yes or no;
   }
   nodesDateFormat(date: string): string {
     // change date format
     return moment(date).utc().format('yyyy-MM-DDTHH:mm:ss.SSS').toString();
+  }
+
+  checkErrors() {
+    const errorCheck = setInterval(() => {
+      // Error notifications - console
+      console.group('dashboard.component.ts');
+      this.nodes.length === 0
+        ? console.error(new Error("Nodes doesn't have anything"), this.nodes)
+        : clearInterval(errorCheck);
+      this.totalNodes === 0
+        ? console.warn('totalNodes equal to 0', this.totalNodes)
+        : clearInterval(errorCheck);
+      this.lastNode === ''
+        ? console.error(
+            new Error("Last node doesn't contain a date"),
+            this.lastNode
+          )
+        : clearInterval(errorCheck);
+      console.groupEnd();
+    }, 5000);
   }
 }

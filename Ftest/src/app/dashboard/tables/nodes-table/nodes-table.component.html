@@ -1,0 +1,40 @@
+<div class="nodes__header">
+  <h2 class="nodes__header-title">NODES</h2>
+  <h4 class="nodes__header-subtitle">FD = "Free Disk" FR = "Free RAM"</h4>
+</div>
+<div *ngIf="nodes.length !== 0" class="nodes__list" id="list-nodes">
+  <node-preview
+    *ngFor="let node of nodes[index]"
+    [index]="node.id"
+    [node]="node"
+    (sendNode)="showNode(node)"
+    (selected)="toggleStats($event)"
+  ></node-preview>
+</div>
+<h2 class="error" *ngIf="nodes.length === 0">
+  Can't find any nodes, check for errors
+</h2>
+<div *ngIf="nodes.length !== 0" class="nodes__list-pagination">
+  <button
+    [ngClass]="{ disabled: index === 0 }"
+    (click)="changePage('prev')"
+    class="shockBtn2 prev"
+  >
+    <</button
+  ><button
+    [ngClass]="{ disabled: index === nodes.length - 1 }"
+    (click)="changePage('next')"
+    class="shockBtn2 next"
+  >
+    >
+  </button>
+</div>
+<!--
+
+  node-preview:
+
+    - [index] = send id or index in array of each node
+    - [node] = send node object
+    - (sendNode) = With this event, this component recieve the node selected in node-preview to send it to the parent component "tables"
+    - (selected) = Send an event to open details window in mobile
+ -->

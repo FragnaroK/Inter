@@ -1,27 +1,48 @@
 <header>
   <section class="user">
-    <span class="user__profile-img">i</span>
+    <img
+      src="../../../assets/png/profile.png"
+      alt="profile photo"
+      class="user__profile-img"
+    />
     <p class="user__profile-role">Role</p>
   </section>
   <section class="logo">
     <a routerLink="/dashboard" class="logo__home"
-      ><img src="" alt="Logo" class="logo__image"
-    /></a>
+      ><img
+        class="desktopLogo logo__image"
+        src="../../../assets/png/shockbyte light.png"
+        alt="Logo"
+      />
+      <img
+        class="mobileLogo logo__image"
+        src="../../../assets/png/logo.png"
+        alt="Logo"
+      />
+    </a>
   </section>
   <nav class="navBar">
+    <!-- Just appear in Dekstop screen -->
     <ul class="navBar__list">
       <li class="list-item">Dashboard</li>
     </ul>
   </nav>
-  <button class="sideBar-btn sideBar-btn--open" (click)="toggleSideBar()">
-    <span></span>
-  </button>
+  <button
+    class="sideBar-btn sideBar-btn--open"
+    (click)="toggleSideBar()"
+  ></button>
   <section class="sideBar" [ngClass]="{ open: sideBar }">
-    <button class="sideBar-btn sideBar-btn--close" (click)="toggleSideBar()">
-      X
-    </button>
+    <!-- Just in mobile -->
+    <button
+      class="sideBar-btn sideBar-btn--close"
+      (click)="toggleSideBar()"
+    ></button>
     <div class="sideBar__logo">
-      <img src="" alt="logo" class="logo-image" />
+      <img
+        src="../../../assets/png/shockbyte light.png"
+        alt="logo sidebar shockbyte"
+        class="logo-image"
+      />
     </div>
     <nav class="sideBar__navBar">
       <ul class="sideBar__navBar-list">

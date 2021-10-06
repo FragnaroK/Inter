@@ -91,7 +91,7 @@
 
       .details__text {
         grid-area: text-stats;
-        @include flex-default($align-items: flex-start);
+        @include flex-default($justify-content: space-evenly, $wrap:nowrap);
         padding-left: 10%;
 
         p {
@@ -99,6 +99,8 @@
           color: $secondaryColor;
 
           span {
+            font-family: 'Rubik-Bold', sans-serif, 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-size: clamp(20px, 10vw, 30px);
             color: $complementColor;
           }
         }
@@ -113,7 +115,21 @@
 
 }
 
+.tip {
+  display: none;
+}
+
 @media (min-width:1000px) {
+  .tip {
+    position: relative;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    display: block;
+    margin: 0 auto;
+    color: $secondaryColor;
+  }
+
   .node-details {
     position: relative;
     left: 0;

@@ -1,21 +1,10 @@
 <div class="tables">
   <div class="tables__nodes">
-    <div class="tables__nodes__header">
-      <h2 class="tables__nodes__header-title">NODES</h2>
-      <h4 class="tables__nodes__header-subtitle">
-        FD = "Free Disk" FR = "Free RAM"
-      </h4>
-    </div>
-    <div *ngIf="nodes" class="nodes__list">
-      <node-preview
-        *ngFor="let node of nodes"
-        [index]="nodes.indexOf(node)"
-        [node]="node"
-        (sendNode)="showNode(node)"
-        (selected)="toggleStats($event)"
-      ></node-preview>
-    </div>
-    <div *ngIf="!nodes" class="error-msg">Error loading content...</div>
+    <nodes-table
+      [nodes]="nodes"
+      (Clicked)="showNode($event)"
+      (toggle)="toggleStats($event)"
+    ></nodes-table>
   </div>
   <div class="tables__node-details">
     <node-details
@@ -26,3 +15,18 @@
     ></node-details>
   </div>
 </div>
+<!--
+
+  nodes-table:
+    - show list of nodes
+    - [nodes] = send to component nodes array
+    - (clicked) = receive event from component with data from node clicked
+    - (toggle) = receive event to open details window
+
+  node-details:
+    - show details from node selected
+    - (hideD) = receive event to close details window
+    - [show] = send boolean to show details window
+    - [node] = send data from node clicked in nodes-table
+    - [index] = send node index or id
+ -->

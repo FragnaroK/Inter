@@ -10,15 +10,13 @@ import { Node } from 'src/app/core/models/node/node.model';
 export class NodeDetailsComponent implements OnInit {
   constructor() {}
 
-  @Input() node?: Node;
+  @Input() node?: Node; // get resources
   @Input() index?: number;
-  @Input()
-  @Input()
-  show: boolean = false;
+  @Input() show: boolean = false;
   @Output() hideD = new EventEmitter();
 
   toggleShow() {
-    return this.hideD.emit(false);
+    return this.hideD.emit(false); // close the details window in mobile screen, parent component recieve false and close this windows
   }
 
   primaryColor: string = '#00AEFF';

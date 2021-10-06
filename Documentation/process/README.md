@@ -203,3 +203,33 @@ Just something like this:
 > **< >** or **Previous - Next**
 
 And en each click on _Next_, send a request. If there is a page, then save its content and show it, but if there isn't a page just a message about it. The request happens only if there is any changes or new content, not every time you click.
+
+## Day 5 (five) and 6 (six) - API issues fixed & finishing project
+
+- Dashboard.components
+
+  - I applied "polling" method to "self-update" the dashboard every 5 minutes, I didn't use "socket.io" because I still learning about node.js and I don't know how to do it well (for now). I tried to do my best.
+  - I added error notifications to improve debugging
+
+- simple-stats.components
+
+  - Not every box have a subtitle, but it have the tag, I wanted to do a separate component but a forget it
+  - It will check for errors and let the user know when something is happening after 15 secons trying
+  - I change the fonts and fixed the font-size, it will be correct in any screen
+
+- chart.components
+
+  - I used the library `ngx-charts` to show stats with charts and a transform data to percent with a pipe that I made
+    > shared/pipes
+  - Created a component to avoid repeating code and make it more readable and maintainable
+
+- node-details.components
+
+  - To achieve a full responsive design and functionality, in mobile screens, this table can be opened like a `side bar` clicking on any node
+  - In Desktop screens, it shows nex to the nodes table
+  - I used Grid and flexbox to achieve this ehaviour
+  - If I have time, I will add pagination with numbers, because I solved the problem fetching pages from API
+
+And that's all. Now I'm going to set up firebase, but **First** I'm going to push it to GitHub and when I finish with firebase, I will push again and merge:
+
+> development -> main

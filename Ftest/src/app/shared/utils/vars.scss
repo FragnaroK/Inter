@@ -28,6 +28,26 @@ $secondaryColor--dark: #004565;
 
 $complementColor: #FFFFFF;
 
+$titlesFont: 'RussoOne',
+sans-serif,
+'Lucida Sans',
+'Lucida Sans Regular',
+'Lucida Grande',
+'Lucida Sans Unicode',
+Geneva,
+Verdana,
+sans-serif;
+
+@mixin titles {
+  font-family: $titlesFont;
+  letter-spacing: 2px;
+}
+
+@mixin subtitles {
+  font-size: clamp(10px, 12px, 15px);
+  opacity: .5;
+}
+
 @mixin border-shockbyte($width, $radius: 5px) {
   border: $width solid $secondaryColor;
   border-radius: $radius;
@@ -65,9 +85,15 @@ $complementColor: #FFFFFF;
   background-color: $secondaryColor;
   border: none;
   border-radius: 0;
+  cursor: pointer;
 }
 
 .shockBtn2 {
   @include border-shockbyte(2px, 0);
   background-color: transparent;
+  cursor: pointer;
+}
+
+.error {
+  color: crimson;
 }

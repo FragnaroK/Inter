@@ -10,17 +10,15 @@ export class TablesComponent implements OnInit {
   constructor() {}
 
   nodeClicked: any;
-  show: boolean = false;
-
-  @Input() nodes?: Node[]; // Get nodes
+  show: boolean = false; // show or hide details window
+  // Get nodes
+  @Input() nodes!: any[];
 
   ngOnInit(): void {
-    this.showNode(this.nodes![0]); // Assign Default data if any node was selected - Just for Desktop, because in mobile this table appear overlay
+    // Assign Default data if any node was selected - Just for Desktop, because in mobile this table appear overlay
   }
   toggleStats = (e: any) => {
-    this.show = e;
-    console.log('table', e);
-    console.log('table', this.show);
+    this.show = e; // toggle details window
   };
   showNode(node: Node) {
     // Assing node seleceted to send it to child component

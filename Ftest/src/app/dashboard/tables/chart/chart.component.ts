@@ -10,11 +10,12 @@ import { GetPercentPipe } from 'src/app/shared/pipes/get-percent.pipe';
 })
 export class ChartComponent implements OnInit {
   constructor() {}
-
+  // Pipe to get percentage of a number
   percent = new GetPercentPipe();
-
+  // var
   _node!: Node;
   data!: any[];
+  // styles
   primaryColor: string = '#00AEFF';
   secondaryColor: string = '#004565';
 
@@ -26,20 +27,22 @@ export class ChartComponent implements OnInit {
   }
   set node(node: Node) {
     this._node = node;
-    this.generateCharts(this._node);
+    this.generateCharts(this._node); // when a change arise, call this function to show node details
   }
 
-  @Input() labels: boolean = false;
+  @Input() labels: boolean = false; // get value from parent component, but it have a default value, in this case "false"
   @Input() doughnut: boolean = false;
-  @Input() dataType?: 'ram' | 'disk';
+  @Input() dataType?: 'ram' | 'disk'; // this value is required, just to know if it have to show ram or disk stats
 
   @Input() colors: Color = {
+    // get colors, with a default value
     name: '',
     selectable: false,
     group: ScaleType.Quantile,
-    domain: [this.primaryColor, this.secondaryColor],
+    domain: [this.primaryColor, this.secondaryColor], // colors
   };
   @Input() legend: any = {
+    // get legend, with default: false
     show: false,
     position: LegendPosition.Below,
   };
@@ -51,7 +54,7 @@ export class ChartComponent implements OnInit {
   ) => (this.dataType === 'ram' ? this.fetchRam(node) : this.fetchDisk(node));
 
   fetchDisk(node: Node) {
-    // Assign disk data to an Array with objects -- Also utilized to reAssign data on changes
+    // Assign disk data to an Array with objects -- Also utilized to reassign data on changes
     let totalDisk = node.allocated_disk + node.free_disk;
     let data = [
       {
@@ -67,7 +70,7 @@ export class ChartComponent implements OnInit {
   }
 
   fetchRam(node: Node) {
-    // Assign ram data to an Array with objects -- Also utilized to reAssign data on changes
+    // Assign ram data to an Array with objects -- Also utilized to reassign data on changes
     let totalRam = node.allocated_ram + node.free_ram;
     let data = [
       {
@@ -82,6 +85,6 @@ export class ChartComponent implements OnInit {
     this.data = [...data];
   }
   ngOnInit(): void {
-    this.generateCharts(this._node); // Generate charts with default
+    this.generateCharts(this._node); // Generate charts with initial value
   }
 }

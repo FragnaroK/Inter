@@ -1,5 +1,6 @@
 @import '../utils/vars.scss';
 
+/* MOBILE CONFIG */
 ul {
   list-style: none;
 }
@@ -24,6 +25,18 @@ header {
 
   .user {
     grid-area: user;
+    @include flex-default;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    p {
+      margin-top: 2px;
+      font-size: clamp(8px, 12px, 15px); // adjust font size with a min of 8px, pref of 12px and max of 15px
+    }
   }
 
   .logo {
@@ -33,10 +46,14 @@ header {
   .sideBar-btn {
     width: 34px;
     height: 34px;
-    @include border-shockbyte(1px);
-    background: none;
+    @include border-shockbyte(1px, 0);
+    background: url('../../../assets/svg/menu.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100%;
     cursor: pointer;
     transition: background .5s ease-in-out;
+
   }
 
   .sideBar-btn:hover {
@@ -79,9 +96,11 @@ header {
       width: 90%;
       height: 30%;
 
+
+
       .logo-image {
-        width: 100%;
-        height: 100%;
+        width: 80%;
+        height: 80%;
         object-fit: contain;
       }
     }
@@ -122,4 +141,52 @@ header {
 
 }
 
-@media (min-width: 1000px) {}
+.desktopLogo {
+  display: none;
+}
+
+/* DESKTOP CONFIG */
+@media (min-width: 1000px) {
+
+  .desktopLogo {
+    display: block;
+    width: 60%;
+    height: 60%;
+  }
+
+  .mobileLogo {
+    display: none;
+  }
+
+  header {
+    grid-template-areas:
+      "user logo navBar";
+
+    .navBar {
+      grid-area: navBar;
+      display: block;
+      width: 100%;
+      height: 100%;
+
+      &__list {
+        width: 50%;
+        height: 100%;
+
+        .list-item {
+          @include flex-default;
+
+          width: 80%;
+          height: 100%;
+          border-left: 2px solid $secondaryColor;
+          border-right: 2px solid $secondaryColor;
+        }
+      }
+    }
+  }
+
+
+  .sideBar-btn,
+  .sideBar {
+    display: none;
+  }
+}

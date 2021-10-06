@@ -1,24 +1,44 @@
-<div *ngIf="nodes" class="boxes">
+<div class="boxes">
   <div class="box boxes__total-users">
-    <h3 class="total-users__title">Total Nodes</h3>
+    <h2 class="total-users__title">Total Nodes</h2>
     <h5 class="total-users__subtitle"></h5>
-    <p class="total-users__content">{{ nodes }}</p>
+    <p *ngIf="nodes" class="total-users__content">{{ nodes }}</p>
+    <p *ngIf="!nodes" class="total-users__content error">Error</p>
   </div>
   <div class="box boxes__new-users">
-    <h3 class="new-users__title">New Nodes</h3>
+    <h2 class="new-users__title">New Nodes</h2>
     <h5 class="new-users__subtitle">Last 24 hours</h5>
     <p *ngIf="newNodes" class="new-users__content">{{ newNodes }}</p>
-    <p *ngIf="!newNodes" class="last-new__content">No new Nodes</p>
+    <p *ngIf="!newNodes && nodes" class="last-new__content">No new Nodes</p>
+    <p *ngIf="!newNodes && !nodes" class="last-new__content error">Error</p>
   </div>
   <div class="box boxes__last-new">
-    <h3 class="last-new__title">Last Node</h3>
+    <h2 class="last-new__title">Last Node</h2>
     <h5 class="last-new__subtitle"></h5>
     <p *ngIf="lastNode" class="last-new__content">{{ lastNode }}</p>
-    <p *ngIf="!lastNode" class="last-new__content">Something wrong ocurred</p>
+    <p *ngIf="!lastNode" class="last-new__content error">Error</p>
   </div>
 </div>
-<div *ngIf="!nodes" class="boxes">
-  <section class="errorMessage">
-    <h1>An error has ocurred, please contact with support</h1>
+<div class="boxes">
+  <section [ngClass]="{ off: !error }" class="errorMessage">
+    <h1>
+      An error has ocurred, please contact with support or check the console
+    </h1>
+    <button (click)="closeError()" class="close-btn-error shockBtn2">
+      Okay
+    </button>
   </section>
 </div>
+<!--
+
+  Each box have:
+
+    - Title
+    - Subtitle
+    - Info
+    - Error message
+
+  When a problem arise, like nodes not availabel, it will check 5 times, every 3 seconds, if it is available...
+  If it isn't, then show an error message on the screen
+
+ -->

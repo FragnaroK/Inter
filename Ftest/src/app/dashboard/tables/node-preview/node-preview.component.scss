@@ -38,5 +38,17 @@
   &__show {
     width: 20%;
     height: 100%;
+
+    img {
+      width: 80%;
+      height: 80%;
+      object-fit: contain;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .node__info {
+    @include flex-default($justify-content: space-around);
   }
 }

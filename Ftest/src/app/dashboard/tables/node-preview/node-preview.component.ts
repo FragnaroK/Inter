@@ -14,7 +14,7 @@ export class NodePreviewComponent implements OnInit {
   @Output() selected = new EventEmitter(); // Event emiter to allow communication with parent component
 
   selectedEvent() {
-    console.log('clickeado');
+    //  send boolean to opoen window details in mobile
     return this.selected.emit(true);
   }
   selectNode(node: Node) {

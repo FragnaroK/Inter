@@ -1,4 +1,4 @@
-<div *ngIf="node && index" class="node">
+<div *ngIf="node" class="node">
   <div class="node__id">{{ index }}</div>
   <div class="node__info">
     <p>
@@ -13,6 +13,17 @@
     (click)="selectNode(node)"
     (click)="selectedEvent()"
   >
-    >
+    <img
+      src="../../../../assets/svg/arrow.svg"
+      alt="button to show details about node"
+    />
   </button>
 </div>
+<!-- Here is where the table nodes show each node
+
+
+  (click) => When you click on the button, it send the node info and a boolean value to open details window in mobile, or just show data in desktop
+
+
+
+-->

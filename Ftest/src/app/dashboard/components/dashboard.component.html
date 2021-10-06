@@ -1,12 +1,25 @@
 <div class="dashboard">
   <section class="dashboard__primary">
     <simple-stats
-      [nodes]="nodes.length"
+      [nodes]="totalNodes"
       [newNodes]="newNodes"
       [lastNode]="lastNode"
     ></simple-stats>
   </section>
   <section class="dashboard__secondary">
-    <tables-stats [nodes]="sortedNodes"></tables-stats>
+    <tables-stats [nodes]="nodes"></tables-stats>
   </section>
 </div>
+<!--
+  simple-stats:
+
+  [nodes]: number = Total number of nodes
+  [newNodes]: number = Total number of new nodes (last 24hs)
+  [lasTNode]: string = Date of the last Node
+
+  tables-stats:
+
+  [nodes]: any[ Nodes[] ] = Array with arrays of nodes inside, every array is a different page
+
+
+ -->

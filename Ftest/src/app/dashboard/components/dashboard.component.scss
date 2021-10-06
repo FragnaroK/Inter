@@ -1,3 +1,4 @@
+// Mobile
 .dashboard {
   display: flex;
   flex-direction: row;
@@ -6,28 +7,31 @@
   &__primary,
   &__secondary {
     width: 100%;
-
   }
 
   &__primary {
+    // simple-stats
     height: 95vh;
   }
 
   &__secondary {
+    // tables
     height: 80vh;
   }
 
 }
 
+// Desktop
 @media (min-width: 1000px) {
   .dashboard {
+    // I used grid to avoid overflow and have the possibility to add new sections without problem
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: [simple-stats] 20% [tables] 80%;
     grid-template-areas:
       "simple"
       "tables";
-    height: calc(100vh - 80px);
+    height: calc(100vh - 80px); // "total height" - 80px which is the height of the header
 
     &__primary,
     &__secondary {

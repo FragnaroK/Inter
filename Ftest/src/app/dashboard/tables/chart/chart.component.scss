@@ -3,19 +3,6 @@
 
   &__text {
     text-align: center;
-
-    span {
-      font-weight: bolder !important;
-    }
-  }
-}
-
-::ng-deep .chart-legend .legend-labels {
-  border: 1px solid #00AEFF;
-  background: none !important;
-
-  .legend-label-color {
-    border-radius: 100%;
   }
 }
 

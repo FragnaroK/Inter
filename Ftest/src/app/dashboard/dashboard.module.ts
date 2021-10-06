@@ -13,6 +13,7 @@ import { ChartComponent } from './tables/chart/chart.component';
 
 import { ToGBPipe } from '../shared/pipes/to-gb.pipe';
 import { GetPercentPipe } from '../shared/pipes/get-percent.pipe';
+import { NodesTableComponent } from './tables/nodes-table/nodes-table.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { GetPercentPipe } from '../shared/pipes/get-percent.pipe';
     ChartComponent,
     ToGBPipe,
     GetPercentPipe,
+    NodesTableComponent,
   ],
   imports: [CommonModule, DashboardRoutingModule, NgxChartsModule],
   providers: [],
