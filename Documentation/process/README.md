@@ -7,6 +7,7 @@
 2. [Day 2](#day-2-two---convert-designs-to-code)
 3. [Day 3](#day-3-three---finishing-structure-and-test-data-showing)
 4. [Day 4](#day-4-four---finishing-with-design-building)
+5. [Day 5 and 6](#day-5-five-and-6-six---api-issues-fixed--finishing-project)
 
 ## Day 1 (one) - Preparation
 
